@@ -1,5 +1,7 @@
-package com.spring.sales_tax_manager.model;
+package com.spring.sales_tax_manager.usuario;
 
+import com.spring.sales_tax_manager.vendas.Venda;
+import com.spring.sales_tax_manager.produto.Produto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuarios")
@@ -28,11 +31,12 @@ public class Usuario {
     private String name;
 
     @Email(message = "Email inválido")
-    @NotBlank
+    @NotBlank(message = " O email é obrigatório")
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank
+    @NotBlank(message =  "Senha é obrigatória")
+    @Size(min=8, message = "A senha deeve ter no minimo 8 digitos")
     private String password;
 
     @NotBlank(message = "CPF/CNPJ é obrigatório")
@@ -45,10 +49,10 @@ public class Usuario {
     @CreationTimestamp
     private LocalDateTime dataCriacao;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Produto> produtos;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Produto> produtos;
 
-    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL)
-    private List<Venda> vendas;
+    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Venda> vendas;
 
 }

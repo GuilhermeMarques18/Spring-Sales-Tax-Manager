@@ -1,4 +1,4 @@
-package com.spring.sales_tax_manager.model;
+package com.spring.sales_tax_manager.usuario;
 
 public enum Role {
     GERENTE,

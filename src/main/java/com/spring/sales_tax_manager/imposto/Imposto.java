@@ -1,5 +1,6 @@
-package com.spring.sales_tax_manager.model;
+package com.spring.sales_tax_manager.imposto;
 
+import com.spring.sales_tax_manager.vendas.Venda;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.AllArgsConstructor;

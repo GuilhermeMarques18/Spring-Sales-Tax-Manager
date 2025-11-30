@@ -1,5 +1,7 @@
-package com.spring.sales_tax_manager.model;
+package com.spring.sales_tax_manager.produto;
 
+import com.spring.sales_tax_manager.usuario.Usuario;
+import com.spring.sales_tax_manager.vendas.Venda;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;

@@ -1,5 +1,8 @@
-package com.spring.sales_tax_manager.model;
+package com.spring.sales_tax_manager.vendas;
 
+import com.spring.sales_tax_manager.imposto.Imposto;
+import com.spring.sales_tax_manager.produto.Produto;
+import com.spring.sales_tax_manager.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -20,7 +23,7 @@ import java.time.LocalDateTime;
 public class Venda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
@@ -28,7 +31,7 @@ public class Venda {
 
     @ManyToOne
     @JoinColumn(name = "produto_id")
-    private  Produto produto;
+    private Produto produto;
 
     @Min(value=1, message = "Quantidade deve ser maior ou igual a 1")
     private int quantidade;
