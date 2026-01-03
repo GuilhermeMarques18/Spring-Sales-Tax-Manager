@@ -1,7 +1,7 @@
 package com.spring.sales_tax_manager.usuario;
 
 import com.spring.sales_tax_manager.vendas.Venda;
-import com.spring.sales_tax_manager.produto.Produto;
+import com.spring.sales_tax_manager.produto.ProdutoModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -50,7 +49,7 @@ public class Usuario {
     private LocalDateTime dataCriacao;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Produto> produtos;
+    private Set<ProdutoModel> produtoModels;
 
     @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Venda> vendas;

@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public interface ProdutoRepository extends JpaRepository<Produto, Long>{
-    Set<Produto> findByUsuario(Usuario usuario);
+public interface ProdutoRepository extends JpaRepository<ProdutoModel, Long>{
+    Set<ProdutoModel> findByUsuario(Usuario usuario);
 
-    List<Produto> findByCategoria(String categoria);
+    List<ProdutoModel> findByCategoria(String categoria);
 
-    List<Produto> findByPrecoGreaterThan(BigDecimal preco);
+    List<ProdutoModel> findByPrecoGreaterThan(BigDecimal preco);
 
-    @Query("SELECT p FROM Produto p WHERE p.usuario = :usuario AND p.quantidade > 0")
-    Set<Produto> findProdutosDisponiveisByUsuario(@Param("usuario") Usuario usuario);
+    @Query("SELECT p FROM ProdutoModel p WHERE p.usuario = :usuario AND p.quantidade > 0")
+    Set<ProdutoModel> findProdutosDisponiveisByUsuario(@Param("usuario") Usuario usuario);
 }

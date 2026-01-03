@@ -1,7 +1,7 @@
 package com.spring.sales_tax_manager.vendas;
 
 import com.spring.sales_tax_manager.imposto.Imposto;
-import com.spring.sales_tax_manager.produto.Produto;
+import com.spring.sales_tax_manager.produto.ProdutoModel;
 import com.spring.sales_tax_manager.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -31,7 +31,7 @@ public class Venda {
 
     @ManyToOne
     @JoinColumn(name = "produto_id")
-    private Produto produto;
+    private ProdutoModel produto;
 
     @Min(value=1, message = "Quantidade deve ser maior ou igual a 1")
     private int quantidade;
