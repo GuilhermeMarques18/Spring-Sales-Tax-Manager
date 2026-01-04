@@ -2,7 +2,7 @@ package com.spring.sales_tax_manager.vendas;
 
 import com.spring.sales_tax_manager.imposto.Imposto;
 import com.spring.sales_tax_manager.produto.ProdutoModel;
-import com.spring.sales_tax_manager.usuario.Usuario;
+import com.spring.sales_tax_manager.usuario.UsuarioModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -27,7 +27,7 @@ public class Venda {
 
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
-    private Usuario funcionario;
+    private UsuarioModel funcionario;
 
     @ManyToOne
     @JoinColumn(name = "produto_id")

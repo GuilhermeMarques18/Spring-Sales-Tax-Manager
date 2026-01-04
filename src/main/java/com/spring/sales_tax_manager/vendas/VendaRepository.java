@@ -2,7 +2,7 @@
 package com.spring.sales_tax_manager.vendas;
 
 import com.spring.sales_tax_manager.produto.ProdutoModel;
-import com.spring.sales_tax_manager.usuario.Usuario;
+import com.spring.sales_tax_manager.usuario.UsuarioModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +15,7 @@ import java.util.Set;
 @Repository
 public interface VendaRepository extends JpaRepository<Venda, Long> {
 
-    Set<Venda> findByFuncionario(Usuario funcionario);
+    Set<Venda> findByFuncionario(UsuarioModel funcionario);
 
     Set<Venda> findByFuncionarioId(Long funcionarioId);
 

@@ -1,7 +1,7 @@
 package com.spring.sales_tax_manager.produto;
 
 import com.spring.sales_tax_manager.usuario.Role;
-import com.spring.sales_tax_manager.usuario.Usuario;
+import com.spring.sales_tax_manager.usuario.UsuarioModel;
 import com.spring.sales_tax_manager.usuario.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class ProdutoController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<ProdutoModel> createProduto(@Valid @RequestBody ProdutoDTO dto, Authentication auth) {
+    public ResponseEntity<ProdutoModel> saveProduto(@Valid @RequestBody ProdutoDTO dto, Authentication auth) {
         String username = auth.getName();
         ProdutoModel produto = produtoService.saveProduto(dto, username);
         return ResponseEntity.status(HttpStatus.CREATED).body(produto);
@@ -37,11 +37,11 @@ public class ProdutoController {
     @GetMapping
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<ProdutoModel>> getAllProdutos(Authentication auth) {
-        Usuario usuario = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
-        if (usuario.getRole() == Role.ADMIN) {
+        UsuarioModel usuarioModel = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
+        if (usuarioModel.getRole() == Role.ADMIN) {
             return ResponseEntity.ok(produtoService.getAllProdutos());
         } else {
-            return ResponseEntity.ok(new ArrayList<>(produtoService.getProdutosByUsuario(usuario)));
+            return ResponseEntity.ok(new ArrayList<>(produtoService.getProdutosByUsuario(usuarioModel)));
         }
     }
 
@@ -49,11 +49,11 @@ public class ProdutoController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<ProdutoModel> getProdutoById(@PathVariable Long id, Authentication auth) {
-        Usuario usuario = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
+        UsuarioModel usuarioModel = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
         ProdutoModel produto = produtoService.getProdutosById(id).orElse(null);
         if (produto == null) return ResponseEntity.notFound().build();
 
-        if (usuario.getRole() == Role.ADMIN || produto.getUsuario().getId().equals(usuario.getId())) {
+        if (usuarioModel.getRole() == Role.ADMIN || produto.getUsuarioModel().getId().equals(usuarioModel.getId())) {
             return ResponseEntity.ok(produto);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -63,19 +63,27 @@ public class ProdutoController {
     @GetMapping("/meus")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Set<ProdutoModel>> getProdutosByUsuarioLogado(Authentication auth) {
-        Usuario usuario = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
-        Set<ProdutoModel> produtos = produtoService.getProdutosByUsuario(usuario);
+        UsuarioModel usuarioModel = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
+        Set<ProdutoModel> produtos = produtoService.getProdutosByUsuario(usuarioModel);
+        return ResponseEntity.ok(produtos);
+    }
+
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<List<ProdutoModel>> getProdutosByCategoria(
+            @PathVariable String categoria) {
+
+        List<ProdutoModel> produtos = produtoService.getProdutosByCategoria(categoria);
         return ResponseEntity.ok(produtos);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<ProdutoModel> updateProduto(@PathVariable Long id, @Valid @RequestBody ProdutoDTO dto, Authentication auth) {
-        Usuario usuario = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
+        UsuarioModel usuarioModel = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
         ProdutoModel existing = produtoService.getProdutosById(id).orElse(null);
         if (existing == null) return ResponseEntity.notFound().build();
 
-        if (usuario.getRole() == Role.ADMIN || existing.getUsuario().getId().equals(usuario.getId())) {
+        if (usuarioModel.getRole() == Role.ADMIN || existing.getUsuarioModel().getId().equals(usuarioModel.getId())) {
             ProdutoModel updated = produtoService.updateProduto(id, dto);
             return ResponseEntity.ok(updated);
         }

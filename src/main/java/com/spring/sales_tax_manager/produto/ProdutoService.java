@@ -1,6 +1,6 @@
 package com.spring.sales_tax_manager.produto;
 
-import com.spring.sales_tax_manager.usuario.Usuario;
+import com.spring.sales_tax_manager.usuario.UsuarioModel;
 import com.spring.sales_tax_manager.usuario.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class ProdutoService{
 
     @Transactional
     public ProdutoModel saveProduto(ProdutoDTO produtoDTO, String usuarioEmail) {
-        Usuario usuario = usuarioRepository.findByEmail(usuarioEmail)
+        UsuarioModel usuarioModel = usuarioRepository.findByEmail(usuarioEmail)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         ProdutoModel produto = new ProdutoModel();
 
@@ -30,7 +30,7 @@ public class ProdutoService{
         produto.setQuantidade(produtoDTO.quantidade());
         produto.setPreco(produtoDTO.preco());
         produto.setCategoria(produtoDTO.categoria());
-        produto.setUsuario(usuario);
+        produto.setUsuarioModel(usuarioModel);
 
         return produtoRepository.save(produto);
     }
@@ -69,8 +69,8 @@ public class ProdutoService{
         return produtoRepository.findByCategoria(categoria);
     }
 
-    public Set<ProdutoModel> getProdutosByUsuario(Usuario usuario){
-        return produtoRepository.findByUsuario(usuario);
+    public Set<ProdutoModel> getProdutosByUsuario(UsuarioModel usuarioModel){
+        return produtoRepository.findByUsuarioModel(usuarioModel);
     }
 
     public Optional<ProdutoModel> getProdutosById(Long id){
