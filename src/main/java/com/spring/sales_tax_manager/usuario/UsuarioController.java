@@ -22,7 +22,7 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @PostMapping
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<UsuarioModel> saveUsuario(@Valid @RequestBody UsuarioDTO dto) {
 
         UsuarioModel usuario = usuarioService.saveUsuario(dto);

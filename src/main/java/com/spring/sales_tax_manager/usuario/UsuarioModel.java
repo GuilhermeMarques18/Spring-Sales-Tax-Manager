@@ -35,7 +35,7 @@ public class UsuarioModel implements UserDetails {
     private Long id;
 
     @NotBlank(message = "Nome é obrigatorio")
-    @Size(min=20, max = 150, message = "O nome deve ter entre 20 e 150 caracteres")
+    @Size(min=4, max = 150, message = "O nome deve ter entre 20 e 150 caracteres")
     private String name;
 
     @Email(message = "Email inválido")
@@ -54,6 +54,14 @@ public class UsuarioModel implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public UsuarioModel(String email, String password, Role role){
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+
 
     @CreationTimestamp
     private LocalDateTime dataCriacao;
