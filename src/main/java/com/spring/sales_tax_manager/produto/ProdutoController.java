@@ -38,7 +38,7 @@ public class ProdutoController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<ProdutoModel>> getAllProdutos(Authentication auth) {
         UsuarioModel usuarioModel = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
-        if (usuarioModel.getRole() == Role.ADMIN) {
+        if (usuarioModel.getRole() == Role.ROLE_ADMIN) {
             return ResponseEntity.ok(produtoService.getAllProdutos());
         } else {
             return ResponseEntity.ok(new ArrayList<>(produtoService.getProdutosByUsuario(usuarioModel)));
@@ -53,7 +53,7 @@ public class ProdutoController {
         ProdutoModel produto = produtoService.getProdutosById(id).orElse(null);
         if (produto == null) return ResponseEntity.notFound().build();
 
-        if (usuarioModel.getRole() == Role.ADMIN || produto.getUsuarioModel().getId().equals(usuarioModel.getId())) {
+        if (usuarioModel.getRole() == Role.ROLE_ADMIN || produto.getUsuarioModel().getId().equals(usuarioModel.getId())) {
             return ResponseEntity.ok(produto);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -83,7 +83,7 @@ public class ProdutoController {
         ProdutoModel existing = produtoService.getProdutosById(id).orElse(null);
         if (existing == null) return ResponseEntity.notFound().build();
 
-        if (usuarioModel.getRole() == Role.ADMIN || existing.getUsuarioModel().getId().equals(usuarioModel.getId())) {
+        if (usuarioModel.getRole() == Role.ROLE_ADMIN || existing.getUsuarioModel().getId().equals(usuarioModel.getId())) {
             ProdutoModel updated = produtoService.updateProduto(id, dto);
             return ResponseEntity.ok(updated);
         }

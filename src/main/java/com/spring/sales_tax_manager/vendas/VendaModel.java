@@ -1,6 +1,6 @@
 package com.spring.sales_tax_manager.vendas;
 
-import com.spring.sales_tax_manager.imposto.Imposto;
+import com.spring.sales_tax_manager.imposto.ImpostoModel;
 import com.spring.sales_tax_manager.produto.ProdutoModel;
 import com.spring.sales_tax_manager.usuario.UsuarioModel;
 import jakarta.persistence.*;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Venda {
+public class VendaModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,5 +43,5 @@ public class Venda {
     private LocalDateTime  dataVenda;
 
     @OneToOne(mappedBy = "venda", cascade = CascadeType.ALL)
-    private Imposto imposto;
+    private ImpostoModel impostoModel;
 }

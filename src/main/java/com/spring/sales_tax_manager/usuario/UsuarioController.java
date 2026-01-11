@@ -34,7 +34,7 @@ public class UsuarioController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<UsuarioModel>> getAllUsuarios(Authentication auth) {
         UsuarioModel currentUser = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
-        if (currentUser.getRole() == Role.ADMIN) {
+        if (currentUser.getRole() == Role.ROLE_ADMIN) {
             return ResponseEntity.ok(usuarioService.findAll());
         } else {
             return ResponseEntity.ok(List.of(currentUser));
@@ -48,7 +48,7 @@ public class UsuarioController {
         UsuarioModel usuario = usuarioService.getUsuarioById(id).orElse(null);
 
         if (usuario == null) return ResponseEntity.notFound().build();
-        if (currentUser.getRole() == Role.ADMIN || usuario.getId().equals(currentUser.getId())) {
+        if (currentUser.getRole() == Role.ROLE_ADMIN || usuario.getId().equals(currentUser.getId())) {
             return ResponseEntity.ok(usuario);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -68,7 +68,7 @@ public class UsuarioController {
         UsuarioModel existing = usuarioService.getUsuarioById(id).orElse(null);
 
         if (existing == null) return ResponseEntity.notFound().build();
-        if (currentUser.getRole() == Role.ADMIN || existing.getId().equals(currentUser.getId())) {
+        if (currentUser.getRole() == Role.ROLE_ADMIN || existing.getId().equals(currentUser.getId())) {
             UsuarioModel updated = usuarioService.updateUsuario(id, dto);
             return ResponseEntity.ok(updated);
         }

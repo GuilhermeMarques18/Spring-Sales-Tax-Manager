@@ -1,6 +1,6 @@
 package com.spring.sales_tax_manager.imposto;
 
-import com.spring.sales_tax_manager.vendas.Venda;
+import com.spring.sales_tax_manager.vendas.VendaModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.AllArgsConstructor;
@@ -15,14 +15,14 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Imposto {
+public class ImpostoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "venda_id")
-    private Venda venda;
+    private VendaModel venda;
 
     @DecimalMin(value = "0.0")
     private BigDecimal valorCalculado;

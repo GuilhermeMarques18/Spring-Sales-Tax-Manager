@@ -1,10 +1,9 @@
 package com.spring.sales_tax_manager.usuario;
 
 import com.spring.sales_tax_manager.usuario.validcpf.ValidCPF;
-import com.spring.sales_tax_manager.vendas.Venda;
+import com.spring.sales_tax_manager.vendas.VendaModel;
 import com.spring.sales_tax_manager.produto.ProdutoModel;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -70,18 +69,21 @@ public class UsuarioModel implements UserDetails {
     private Set<ProdutoModel> produtoModels;
 
     @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Venda> vendas;
+    private Set<VendaModel> vendaModels;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == Role.ADMIN) return List.of( new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"));
-        else return List.of( new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority(this.role.name()));
     }
+
 
     @Override
     public String getUsername() {
         return email;
     }
+
+    @Override
+    public String getPassword() {return password;}
 
     @Override
     public boolean isAccountNonExpired() {

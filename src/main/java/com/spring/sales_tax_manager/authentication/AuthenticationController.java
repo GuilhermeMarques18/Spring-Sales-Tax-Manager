@@ -53,7 +53,7 @@ public class AuthenticationController {
         UsuarioModel user = new UsuarioModel();
         user.setEmail(dto.email());
         user.setPassword(encryptedPassword);
-        user.setRole(Role.USER);
+        user.setRole(Role.ROLE_USER);
 
         userRepository.save(user);
 

@@ -1,6 +1,6 @@
 package com.spring.sales_tax_manager.imposto;
 
-import com.spring.sales_tax_manager.vendas.Venda;
+import com.spring.sales_tax_manager.vendas.VendaModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,14 +11,12 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface ImpostoRepository extends JpaRepository<Imposto, Long> {
+public interface ImpostoRepository extends JpaRepository<ImpostoModel, Long> {
 
-    Optional<Imposto> findByVenda(Venda venda);
+    Optional<ImpostoModel> findByVenda(VendaModel vendaModel);
 
-    Set<Imposto> findByTipoImposto(String tipoImposto);
+    List<ImpostoModel> findByTipoImposto(String tipoImposto);
 
-    List<Imposto> findByValorCalculadoGreaterThan(BigDecimal valor);
+    List<ImpostoModel> findByValorCalculadoGreaterThan(BigDecimal valor);
 
-    @Query("SELECT i FROM Imposto i WHERE i.venda.funcionario.id = :funcionarioId")
-    Set<Imposto> findImpostosByFuncionarioId(@Param("funcionarioId") Long funcionarioId);
 }

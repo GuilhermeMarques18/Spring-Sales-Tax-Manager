@@ -18,17 +18,24 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private  TokenService tokenService;
+    private TokenService tokenService;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public SecurityFilter(TokenService tokenService) {
-        this.tokenService = tokenService;
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.equals("/auth/login") || path.equals("/auth/register");
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
+
         String token = recoverToken(request);
 
         if (token != null) {
@@ -37,11 +44,13 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (subject != null) {
                 UsuarioModel user = usuarioRepository.findByEmail(subject)
                         .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
                 var authentication = new UsernamePasswordAuthenticationToken(
                         user,
                         null,
                         user.getAuthorities()
                 );
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
@@ -49,10 +58,10 @@ public class SecurityFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-
     private String recoverToken(HttpServletRequest request) {
-        var authHeader = request.getHeader("Authorization");
-        if(authHeader == null) return null;
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null) return null;
         return authHeader.replace("Bearer ", "");
     }
 }
+

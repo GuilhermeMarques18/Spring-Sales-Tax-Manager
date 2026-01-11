@@ -1,7 +1,7 @@
 package com.spring.sales_tax_manager.produto;
 
 import com.spring.sales_tax_manager.usuario.UsuarioModel;
-import com.spring.sales_tax_manager.vendas.Venda;
+import com.spring.sales_tax_manager.vendas.VendaModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -43,7 +43,7 @@ public class ProdutoModel {
     private UsuarioModel usuarioModel;
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
-    private List<Venda> vendas;
+    private List<VendaModel> vendaModels;
 
 
 
