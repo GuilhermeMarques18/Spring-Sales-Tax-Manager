@@ -3,6 +3,7 @@ package com.spring.sales_tax_manager.vendas;
 import com.spring.sales_tax_manager.imposto.ImpostoModel;
 import com.spring.sales_tax_manager.produto.ProdutoModel;
 import com.spring.sales_tax_manager.usuario.UsuarioModel;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -27,6 +28,7 @@ public class VendaModel {
 
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
+    @JsonManagedReference
     private UsuarioModel funcionario;
 
     @ManyToOne

@@ -1,6 +1,8 @@
 package com.spring.sales_tax_manager.produto;
 
 import com.spring.sales_tax_manager.usuario.UsuarioModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.spring.sales_tax_manager.vendas.VendaModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -40,9 +42,11 @@ public class ProdutoModel {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @JsonManagedReference
     private UsuarioModel usuarioModel;
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<VendaModel> vendaModels;
 
 

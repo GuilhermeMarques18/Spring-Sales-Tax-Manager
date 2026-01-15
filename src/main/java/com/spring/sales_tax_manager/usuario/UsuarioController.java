@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     @Autowired
@@ -22,15 +22,14 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @PostMapping
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioModel> saveUsuario(@Valid @RequestBody UsuarioDTO dto) {
-
         UsuarioModel usuario = usuarioService.saveUsuario(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
     }
 
 
-    @GetMapping
+    @GetMapping("all")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<UsuarioModel>> getAllUsuarios(Authentication auth) {
         UsuarioModel currentUser = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
@@ -54,7 +53,8 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @GetMapping("/role{role}")
+    @GetMapping("/role/{role}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Set<UsuarioModel> getUsuariosByRole(@PathVariable Role role) {
         return usuarioService.getUsuariosByRole(role);
     }

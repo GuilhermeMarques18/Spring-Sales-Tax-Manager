@@ -10,13 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/produtos")
+@RequestMapping("/produtos")
 public class ProdutoController {
 
     @Autowired
@@ -69,6 +68,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/categoria/{categoria}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<ProdutoModel>> getProdutosByCategoria(
             @PathVariable String categoria) {
 

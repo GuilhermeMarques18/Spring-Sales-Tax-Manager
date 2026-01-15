@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/impostos")
+@RequestMapping("/impostos")
 public class ImpostoController {
 
     @Autowired
@@ -22,7 +22,7 @@ public class ImpostoController {
     private UsuarioRepository usuarioRepository;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<ImpostoModel>> getAllImpostos(Authentication auth) {
         UsuarioModel user = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
         if (user.getRole() == Role.ROLE_ADMIN) {
@@ -33,7 +33,7 @@ public class ImpostoController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<ImpostoModel> getImpostoById(@PathVariable Long id) {
         return impostoService.getImpostoById(id)
                 .map(ResponseEntity::ok)
@@ -41,14 +41,14 @@ public class ImpostoController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ImpostoModel> updateImposto(@PathVariable Long id, @Valid @RequestBody ImpostoDTO dto) {
         ImpostoModel updated = impostoService.updateImposto(id, dto);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteImposto(@PathVariable Long id) {
         impostoService.deleteImposto(id);
         return ResponseEntity.noContent().build();

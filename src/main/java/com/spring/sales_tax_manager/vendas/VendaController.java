@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/vendas")
+@RequestMapping("/vendas")
 public class VendaController {
 
     @Autowired
@@ -26,21 +26,19 @@ public class VendaController {
 
 
     @PostMapping
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<VendaModel> saveVenda(@Valid @RequestBody VendaDTO dto, Authentication auth) {
         String email = auth.getName();
         UsuarioModel funcionario = usuarioRepository.findByEmail(email).orElseThrow();
 
         VendaModel venda = vendaService.saveVenda(dto, email);
-        venda.setFuncionario(funcionario);
-        vendaService.saveVenda(dto, email);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(venda);
     }
 
 
     @GetMapping
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<VendaModel>> getAllVendas(Authentication auth) {
         UsuarioModel user = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
         if (user.getRole() == Role.ROLE_ADMIN) {
@@ -52,7 +50,7 @@ public class VendaController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<VendaModel> getVendaById(@PathVariable Long id, Authentication auth) {
         UsuarioModel user = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
         VendaModel venda = vendaService.getVendaById(id).orElse(null);
@@ -65,7 +63,7 @@ public class VendaController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<VendaModel> updateVenda(@PathVariable Long id, @Valid @RequestBody VendaDTO dto, Authentication auth) {
         UsuarioModel user = usuarioRepository.findByEmail(auth.getName()).orElseThrow();
         VendaModel venda = vendaService.getVendaById(id).orElse(null);
@@ -79,7 +77,7 @@ public class VendaController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteVenda(@PathVariable Long id) {
         vendaService.deleteVenda(id);
         return ResponseEntity.noContent().build();
