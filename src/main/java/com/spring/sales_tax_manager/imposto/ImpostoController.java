@@ -32,6 +32,13 @@ public class ImpostoController {
         }
     }
 
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ImpostoModel> saveImposto(@Valid @RequestBody ImpostoDTO dto) {
+        ImpostoModel imposto = impostoService.saveImposto(dto);
+        return ResponseEntity.status(201).body(imposto);
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<ImpostoModel> getImpostoById(@PathVariable Long id) {

@@ -17,6 +17,14 @@ public class ImpostoService {
         this.impostoRepository = impostoRepository;
     }
 
+    @Transactional
+    public ImpostoModel saveImposto(ImpostoDTO impostoDTO) {
+        ImpostoModel imposto = new ImpostoModel();
+        imposto.setValorCalculado(impostoDTO.valorCalculado());
+        imposto.setTipoImposto(impostoDTO.tipoImposto());
+        return impostoRepository.save(imposto);
+    }
+
 
     @Transactional
     public ImpostoModel calcularImposto(VendaModel venda) {
